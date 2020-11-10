@@ -1,0 +1,36 @@
+server:
+  port: 9999
+
+monolito:
+  url: http://localhost:8080
+
+restaurante:
+  url: http://localhost:8083
+
+spring:
+  cloud:
+    gateway:
+      routes:
+      - id: pagamentos
+        uri: http://localhost:8081
+        predicates:
+        - Path=/pagamentos/**
+      - id: distancia
+        uri: lb://distancia
+        predicates:
+        - Path=/distancias/**
+      - id: restaurantes
+        uri: http://localhost:8083
+        predicates:
+        - Path=/restaurantes/**
+      - id: monolito
+        uri: http://localhost:8080
+        predicates:
+        - Path=/**
+
+ribbon:
+  eureka: 
+    enabled: false
+distancia:
+  ribbon:
+    listOfServers: localhost:8082, localhost:8092    
