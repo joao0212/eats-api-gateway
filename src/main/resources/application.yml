@@ -1,13 +1,12 @@
 server:
   port: 9999
 
-monolito:
-  url: http://localhost:8080
-
 restaurante:
   url: http://localhost:8083
 
 spring:
+  application:
+    name: apigateway
   cloud:
     gateway:
       routes:
@@ -24,13 +23,13 @@ spring:
         predicates:
         - Path=/restaurantes/**
       - id: monolito
-        uri: http://localhost:8080
+        uri: lb://monolito
         predicates:
         - Path=/**
 
 ribbon:
   eureka: 
-    enabled: false
-distancia:
-  ribbon:
-    listOfServers: localhost:8082, localhost:8092    
+    client:
+      serviceUrl:
+        defaultZone: ${EUREKA_URI:http://localhost:8761/eureka/}
+
